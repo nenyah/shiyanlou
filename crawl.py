@@ -27,7 +27,7 @@ headers = [
 def book_spider(book_tag):
     global file_content, headers
 
-    url = "http://www.douban.com/tag/%s/book" % book_tag
+    url = "http://www.douban.com/tag/{0!s}/book".format(book_tag)
     source_code = requests.get(url, headers=random.choice(headers))
     # just get the code, no headers or anything
     plain_text = source_code.text
@@ -41,7 +41,7 @@ def book_spider(book_tag):
     # 得到书籍列表的soup对象
     list_soup = soup.find('div', {'class': 'mod book-list'})
     for book_info in list_soup.findAll('dd'):
-        print 'tag: %s, count: %d' % (book_tag, count)
+        print 'tag: {0!s}, count: {1:d}'.format(book_tag, count)
         title = book_info.find('a', {'class': 'title'}).string.strip()
         desc = book_info.find('div', {'class': 'desc'}).string.strip()
         desc_list = desc.split('/')
@@ -51,7 +51,7 @@ def book_spider(book_tag):
             rating = book_info.find('span', {'class': 'rating_nums'}).string.strip()
         except AttributeError:
             rating = "无"
-        file_content += "*%d\t《%s》\t评分：%s\n\t%s\n\t%s\n\n" % (
+        file_content += "*{0:d}\t《{1!s}》\t评分：{2!s}\n\t{3!s}\n\t{4!s}\n\n".format(
             count, title, rating, author_info.strip(), pub_info.strip())
         count += 1
 
